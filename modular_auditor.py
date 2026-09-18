@@ -1,24 +1,23 @@
 inventory = 0
 Failed = 0
 
-stock = get_valid_Input()
+
 
 def get_valid_Input():
-    while True:
+        global Failed
         stock = input("Please enter the stock quantity:")
         if stock == "quit":
             return stock
-        elif stock.isdigit():
-            return int(stock)
-        else:
+        if not stock.isdigit():
             print("Invalid stock quantity. Please enter again.")
+            Failed += 1
 
-def process_quantity(stock):
+def process_quantity(current_total, new_value):
     global inventory, Failed
-    if stock == "quit":
+    if new_value == "quit":
         return
-    elif isinstance(stock, int):
-        inventory += stock
+    elif isinstance(new_value, int):
+        inventory += new_value      
         print("Current Stock Quantity:", inventory)
     else:
         print("Invalid stock quantity. Please enter again.")
@@ -51,7 +50,14 @@ def generate_report():
 #         break
 #     stock = input("Please enter the stock quantity:")
 
-print("Total Units Processed:", inventory)
-print ("Number of Failed/Rejected Entries:", Failed, "units")
+# print("Total Units Processed:", inventory)
+# print ("Number of Failed/Rejected Entries:", Failed, "units")
 
-    
+while True:
+    stock_quantity = get_valid_Input()
+    if stock_quantity != "quit":
+        process_quantity(inventory, stock_quantity)
+        calculate_tax(inventory)
+    else:
+        generate_report()
+        break
